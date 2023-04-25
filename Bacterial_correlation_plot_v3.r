@@ -1,8 +1,8 @@
 rm(list=ls())
-setwd('D:/desk/DZQD2023040574-b1/20221118_QD2021-19862_韦超老师的12个小鼠角膜组织2bRAD-M微生物菌群检测项目_第2次个性化_结题报告/report/fig3')
+setwd('D:\\desk\\DZQD2023040574-b1\\PA\\fig3')
 library(reshape2)
 library(pheatmap)
-file <- 'species_correlation.xls'
+file <- 'genus_species_correlation.xls'
 df <- read.table(file,header = TRUE, sep = '\t')
 
 df_c <- df[,-3]
@@ -37,9 +37,9 @@ s <- matrix(s,nrow = 30)
 prefix <- sub("_correlation.xls", "",file)
 
 pdf(file=paste(prefix,'_corheatmap.pdf',sep = ""),width = 9,height = 6)
-pheatmap(df_p, cluster_rows = FALSE, cluster_cols = FALSE,angle_col = 90,display_numbers = s)
+pheatmap(df_p, cluster_rows = FALSE, cluster_cols = FALSE,angle_col = 90,display_numbers = s, main = "Correlation Heatmap")
 dev.off()
 
 png(file=paste(prefix,'_corheatmap.png',sep = ""),width = 900,height = 600)
-pheatmap(df_p, cluster_rows = FALSE, cluster_cols = FALSE,angle_col = 90,display_numbers = s)
+pheatmap(df_p, cluster_rows = FALSE, cluster_cols = FALSE,angle_col = 90,display_numbers = s, main = "Correlation Heatmap")
 dev.off()
