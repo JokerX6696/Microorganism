@@ -5,7 +5,7 @@ df <- read.table(file,sep = '\t',quote = "",header = TRUE)
 df <- df[,-c(1,2,3,4,5,6,8,9)]
 
 
-out_name <- 'test.xls'
+out_name <- 'group_t.test.xls'
 
 stage_4 <- c("XK0001C","XK0002C","XK0008C","XK0009C")
 stage_3 <- c("XK0005C","XK0007C","XK0003C")
@@ -76,5 +76,8 @@ df_p <- data.frame(specie,
                    p_value_Infected,
                    p_value_hypertension
                    )
+names(df_p) <- c("Specie","p_value(分期)","p_value(小细胞_鳞癌)",
+                 "p_value(小细胞_腺癌)","p_value(鳞癌_腺癌)","p_value(感染)",
+                 "p_value(高血压病史)")
 
 write.table(df_p,file = out_name,quote = F,sep = '\t',row.names = FALSE)
