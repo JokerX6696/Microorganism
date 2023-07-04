@@ -6,6 +6,7 @@ abd_file <- 'D:/desk/XMSH_202306_4587/Abundance_Stat.filter.anno.xls'
 g <- 'D:/desk/XMSH_202306_4587/group.list'
 # 绘图函数
 plot_big <- function(df, out_name){
+  h <- dim(df)[1]/5
   pdf(out_name, width = 36, height = 3,)
   pheatmap(df,
            border=FALSE,
@@ -24,7 +25,8 @@ plot_big <- function(df, out_name){
 plot_small <- function(df, out_name){
   annotation_col = data.frame(Group = Group$group)
   rownames(annotation_col) <- Group$sample
-  if(dim(df)[1]==30){h=5}else{h=3}
+  #if(dim(df)[1]==30){h=20}else{h=2.5}
+  h <- dim(df)[1]/5
   pdf(out_name, width = 11, height = h,)
   pheatmap(df,
            border=FALSE,
@@ -38,7 +40,7 @@ plot_small <- function(df, out_name){
            fontsize_row = 8,
            fontsize_col = 8,
            show_colnames = FALSE,
-           annotation_col = annotation_col
+           #annotation_col = annotation_col
            
   )
   dev.off()
