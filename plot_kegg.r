@@ -3,7 +3,7 @@ setwd('D:/desk/XMSH_202307_5066')
 library(ggplot2)
 library(reshape2)
 # 读取 kegg db 文件
-db_file <- 'KEGGpathway_three_levels_v2.xls'
+db_file <- 'KEGGpathway_three_levels_v2.xls' # /data/scripts/toolbox/all_tools/module/function_anno/current/config/KEGGpathway_three_levels_v2.xls
 df_db <- read.table(db_file, header = FALSE, sep = '\t', quote = "", comment.char = "")
 names(df_db) <- c("ID","L1","L2","L3")
 g <- c('EtOH-1__EtOH-4__Con-1__Con-4',)
