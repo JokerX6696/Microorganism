@@ -71,6 +71,6 @@ df_save <- data.frame(Tag_num = samples_size,df_shannon)
 df_save <- df_save[,-length(names(df_save))]
 write.table(x = df_save,file = 'Shannon_stat.xls',sep = '\t',quote = F,row.names = F,col.names = T)
 
+saveRDS(object = df_shannon_plot,file = 'plot.rds')
 
-
-
+test <- readRDS('plot.rds')
