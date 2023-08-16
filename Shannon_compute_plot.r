@@ -58,7 +58,7 @@ df_shannon_plot <- melt(df_shannon,id.vars = 'x_pos')
 names(df_shannon_plot)[2:3] <- c('sample','Shanno')
 
 
-levels(df_shannon_plot$sample) <- c(sort(as.vector(unique(df_shannon_plot$sample))))  # 注意这里因为control 手动控制一下顺序
+levels(df_shannon_plot$sample) <- c(sort(as.vector(unique(df_shannon_plot$sample))))  # 注意这里可以手动控制一下顺序
 ################### 开始绘图
 p <- ggplot(data = df_shannon_plot,mapping = aes(x=x_pos,y=Shanno,color=sample)) + 
   geom_line() + 
@@ -67,6 +67,9 @@ p <- ggplot(data = df_shannon_plot,mapping = aes(x=x_pos,y=Shanno,color=sample))
 
 ggsave(filename = 'Shannon.png',plot = p,device = 'png',width = 9,height = 6)
 
+df_save <- data.frame(Tag_num = samples_size,df_shannon)
+df_save <- df_save[,-length(names(df_save))]
+write.table(x = df_save,file = 'Shannon_stat.xls',sep = '\t',quote = F,row.names = F,col.names = T)
 
 
 
