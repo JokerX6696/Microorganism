@@ -47,14 +47,27 @@ df_tag <- df_tag[which(rownames(df_tag) != rm_host),]
 
 
 
-# 随机取样
-
-
+# 随机取样后 获取不同取样次数的香侬熵,返回一个向量
 shannon_vector <- get_shannon(df_tag)
 # 处理 香农熵矩阵 用于后续画图
-df_shannon <- data.frame(matrix(shannon_vector,nrow = length(samples_size)))
+df_shannon <- data.frame(matrix(shannon_vector,nrow = length(samples_size))) # 向量根据不同的取样次数 变为矩阵
 names(df_shannon) <- names(df_tag)
 df_shannon$x_pos <- samples_size
 
 df_shannon_plot <- melt(df_shannon,id.vars = 'x_pos')
 names(df_shannon_plot)[2:3] <- c('sample','Shanno')
+
+
+levels(df_shannon_plot$sample) <- c(sort(as.vector(unique(df_shannon_plot$sample))))  # 注意这里因为control 手动控制一下顺序
+################### 开始绘图
+p <- ggplot(data = df_shannon_plot,mapping = aes(x=x_pos,y=Shanno,color=sample)) + 
+  geom_line() + 
+  theme_bw() + 
+  xlab('Tag_per_sample')
+
+ggsave(filename = 'Shannon.png',plot = p,device = 'png',width = 9,height = 6)
+
+
+
+
+
