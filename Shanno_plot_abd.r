@@ -67,3 +67,15 @@ ggsave(filename = 'Shannon.pdf',plot = p,device = 'pdf',width = 9,height = 8)
 # ggplot() + 
 #   geom_ribbon(data=area,mapping = aes(x=num,ymin=y_bot,ymax=y_top),fill = "blue", alpha = 0.5)
 
+p2 <- ggplot() + 
+  stat_boxplot(aes(ymin=..lower..,ymax=..upper..),size = 0.5)  + # 绘制箱子整体 使用实线主题覆盖虚线
+  stat_boxplot(geom = "errorbar",aes(ymin=..ymax..),color="black") +  # 添加上方最大值横线
+  stat_boxplot(geom = "errorbar",aes(ymax=..ymin..),color="black") +  # 添加下方最小值横线
+  geom_boxplot(data = plot_df,mapping = aes(x=factor(num),y=Shannon,fill='yellow')) + 
+  scale_fill_manual(values = '#FFFF00') + 
+  guides(fill=FALSE) +  # 去除图例
+  xlab('Number of Samples Sequenced') + 
+  theme_bw() +  # 主题
+  theme(panel.grid =element_blank()) +    # 删掉网格线
+  scale_x_discrete(breaks = seq(0, x_lim, by = 10)) +
+  geom_ribbon(data=area,mapping = aes(x=num,ymin=y_bot,ymax=y_top),fill = "blue", alpha = 0.5)
