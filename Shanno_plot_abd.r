@@ -1,11 +1,22 @@
-rm(list = ls())
-setwd('D:/desk/R_wkdir')
-##
-library('ggplot2')
-library('reshape2')
+## 设置环境
+package_names <- c('ggplot2','reshape2','optparse')
+for (pkg in package_names) {
+  if (!require(pkg, character.only = TRUE)) {
+    install.packages(pkg)
+    library(pkg, character.only = TRUE)
+  }
+}
+####  传参
+
+option_list <- list(
+  make_option(c("-i","--input"),type="character",help="统计信息熵所使用到的文件,例如丰度矩阵 species.xls 或其他类似格式的文件!"),
+  make_option(c("-s","--seed"),type="character",help="取样过程中seed 使用到的 seed, 使用 ',' 分割,例如 '1,2,3,4,5,6',推荐使用默认,数字的数量代表取样的数量. 数字越多,运行速度越慢 boxplot 点越多.",default="79,69,1,3,1,1"),
+)
+opt <- parse_args(OptionParser(option_list=option_list))
 ####  para
-seed_set <- c(79,69,1,3,1,1)
-abd_file <- 'species.xls'
+
+seed_set <- strsplit(opt$s,',')[[1]]
+abd_file <- opt$i
 ## 定义香侬计算函数  给定一个丰度向量,返回一个香侬值
 Shannon <- function(prop){
   entropy <- -sum(prop * log2(prop), na.rm = TRUE)  # 计算香农熵
