@@ -105,8 +105,9 @@ for s in list(df.columns):
     if s == 'Species':
         break
     xb += 1
+xb = xb +1
 # 创建布尔 Series，表示第8列到最后一列是否都为0
-all_zeros = (df.iloc[:, 7:] == 0).all(axis=1)
+all_zeros = (df.iloc[:, xb:] == 0).all(axis=1)
 df = df[~all_zeros]
 df.to_csv(out,sep='\t',index=False) 
 
