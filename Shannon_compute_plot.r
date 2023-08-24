@@ -1,7 +1,7 @@
 rm(list = ls())
 setwd('D:/desk/R_wkdir')
 #### 本脚本 通过标签矩阵计算 sequence per sample 与 Shannon 的 line 图
-
+# 123
 #  这里设置 seed 防止每次抽样结果不同!
 set.seed(1311)
 #  加载需要用到的包
