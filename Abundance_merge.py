@@ -15,7 +15,7 @@ def merge(df1,df2):
     # 提取 样本矩阵
     samples = []
     for i in col_idx:
-        if i not in level_list:
+        if i not in level_list and i != 'Species':
             samples.append(i)
     df_samples = new_df[samples].reset_index(drop=True)
     # 处理 level 矩阵
@@ -92,7 +92,7 @@ for file in Abd_list[1:]:
     f_add = file 
     add_df = pd.read_csv(f_add, sep='\t',index_col='Species')
     df = merge(df1=raw_df,df2=add_df)
-    raw_df = df.set_index('Species')
+    raw_df = df.set_index('Spices')
 
 # 选择指定样本
 if sel:
