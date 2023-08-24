@@ -69,7 +69,7 @@ if files != None:
 else:
     files = []
 if sample_list != None:
-    sample_list = sample_list.split(',')
+    sample_list = ['#Kingdom', 'Phylum', 'Class', 'Order', 'Family', 'Genus', 'Species'] + sample_list.split(',')
     sel = True
 else:
     sel = False
@@ -92,7 +92,7 @@ for file in Abd_list[1:]:
     f_add = file 
     add_df = pd.read_csv(f_add, sep='\t',index_col='Species')
     df = merge(df1=raw_df,df2=add_df)
-    raw_df = df
+    raw_df = df.set_index('Species')
 
 # 选择指定样本
 if sel:
