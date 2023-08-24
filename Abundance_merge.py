@@ -92,13 +92,22 @@ for file in Abd_list[1:]:
     f_add = file 
     add_df = pd.read_csv(f_add, sep='\t',index_col='Species')
     df = merge(df1=raw_df,df2=add_df)
-    raw_df = df.set_index('Spices')
+    raw_df = df.set_index('Species')
 
 # 选择指定样本
 if sel:
     df = df[sample_list]
 # 最终将缺失 值 NaN 填充为 0
 df = df.fillna(0)
+
+xb = 0
+for s in list(df.columns):
+    if s == 'Species':
+        break
+    xb += 1
+# 创建布尔 Series，表示第8列到最后一列是否都为0
+all_zeros = (df.iloc[:, 7:] == 0).all(axis=1)
+df = df[~all_zeros]
 df.to_csv(out,sep='\t',index=False) 
 
 
