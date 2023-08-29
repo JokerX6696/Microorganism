@@ -29,12 +29,11 @@ def ACE(value_list, rare_tag_threshold=10):
     for i in stat_num:  # 这里在字典的 key 中循环 也就是 unique 后的 tag 数量
         if i <= rare_tag_threshold and i != 0:
             n_rare += (i * stat_num[i])
-            s_rare += 1
+            s_rare += stat_num[i]
             F_i_sum += (i*(i-1)*stat_num[i])
         elif i > rare_tag_threshold:
             s_high_abd += stat_num[i]
     F1 = sum(1 for q in value_list if q == 1) # F1 为 仅有一个标签的物种
-    print(n_rare)
     cover_ace = 1 - (F1/n_rare)   # cover_ace 为样本覆盖度的估计值
     gamma_ace = max([(s_rare * F_i_sum)/(cover_ace*n_rare*(n_rare-1)), 0])  # 稀有物种的变异系数
     s_ace = s_high_abd + s_rare/cover_ace + F1*gamma_ace/cover_ace
