@@ -4,6 +4,7 @@ from method import Chao1, ACE
 # para
 host = 'human'
 enzyme = 'BcgI'
+rare_tag = 10
 # 获取矩阵
 df = get_tag_matrix(wd='D:/desk/python_wkdir/Quan',jk=enzyme)
 # 删除宿主
@@ -14,7 +15,7 @@ alpha_dict = {}
 for sample in samples:
     alpha_dict[sample] = {}
     alpha_dict[sample]['observe'], alpha_dict[sample]['chao1'] = Chao1(df[sample])
-    alpha_dict[sample]['ACE'] = ACE(df[sample],rare_tag_threshold=3)
+    alpha_dict[sample]['ACE'] = ACE(df[sample],rare_tag_threshold=rare_tag)
 
 
 df_alpha = pd.DataFrame(alpha_dict).T
