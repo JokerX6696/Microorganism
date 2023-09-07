@@ -1,23 +1,45 @@
 rm(list=ls())
-setwd('D:/desk/XMSH_202307_5385')
+setwd('D:/desk/XMSH_202308_5641')
 library("pROC")
 library('ggplot2')
 library('reshape2')
 library('RColorBrewer')
 library("randomForest");set.seed(1311)
 ############## para
-classify <- c('Brevibacillus_parabrevis','Candida_glabrata','Cutibacterium_acnes','Acinetobacter_pittii','Bacteroides_uniformis')
+classify <- c(
+  'Prevotella_melaninogenica',
+  'Neisseria_sp000186165',
+  'Neisseria_subflava',
+  'Veillonella_atypica',
+  'Prevotella_pallens',
+  'Porphyromonas_gingivalis',
+  'Porphyromonas_pasteri',
+  'Prevotella_jejuni',
+  'Prevotella_intermedia',
+  'Prevotella_histicola',
+  'Neisseria_elongata',
+  'Veillonella_parvula_A'
+)
 f <- 'species.xls'
+f_group <- 'group.list'
 tree_num <- 1000
-Group <- c("T_CRC","T_CRN")
-#############
+
+############# group
+Group <- read.table(f_group,sep = '\t')
+names(Group) <- c("sample",'group')
+############## 矩阵处理
 df <- read.table(f,sep = '\t',quote = "", header = TRUE,row.names = 1)
 
-df <- df[rownames(df) %in% classify,]
+df <- df[rownames(df) %in% classify,]  # 提取指定微生物
 
 df <- as.data.frame(t(df))
-df$Group <- factor(gsub("_\\d+$","",rownames(df)),levels = Group)
-
+temp_vet <- c()
+for (i in rownames(df)) {
+  num <- which(i == Group$sample)
+  temp_vet <- c(temp_vet,Group$group[num])
+}
+df$Group <- factor(temp_vet,levels = unique(temp_vet))
+###################### 获取 mtry 值
 idx <- sample(nrow(df),nrow(df)*0.7)
 
 train_df <- df[idx,]
@@ -30,9 +52,10 @@ getmtry <- tuneRF(
   trace = TRUE,
   improve = 0.05,
   plot = TRUE
-  )
+)
 dev.off()
-mtry <- getmtry[as.numeric(which(min(getmtry[,'OOBError']) == getmtry[,'OOBError'])[1]),1];mtry=5
+mtry <- getmtry[as.numeric(which(min(getmtry[,'OOBError']) == getmtry[,'OOBError'])[1]),1];mtry=1
+######## 建模
 train_rf <- randomForest(
   Group ~ ., 
   data = train_df,
@@ -43,7 +66,7 @@ train_rf <- randomForest(
 )
 
 train_rf$importance
-
+#  基于模型进行预测
 pre_ran <- predict(train_rf, newdata = test_df)
 obs_p_ran = data.frame(prob=pre_ran,obs=test_df$Group)
 
@@ -51,7 +74,7 @@ ran_roc <- roc(test_df$Group,as.numeric(pre_ran))
 plot(ran_roc, print.auc=TRUE, auc.polygon=TRUE, grid=c(0.1, 0.2),grid.col=c("green", "red"), max.auc.polygon=TRUE,auc.polygon.col="skyblue", print.thres=TRUE,main='随机森林模型ROC曲线')
 
 
-# boxplot
+# boxplot 可视化
 plot_df <- as.data.frame(predict(train_rf, type = "prob") ) # 查看每个样本预测到不同样本的概率
 plot_df <- melt(plot_df)
 names(plot_df) <- c('Group', 'Value')
@@ -62,7 +85,7 @@ p <- wilcox.test(x,y);p <- round(p$p.value, digits = 4)
 
 P <- ggplot(data = plot_df,mapping = aes(x=Group,y=Value,fill=Group)) + 
   geom_boxplot(width = 0.6,linetype="dashed") + 
-  scale_fill_manual(values = c('#E41A1C','#377EB8','#4DAF4A')) +
+  scale_fill_manual(values = c('#E41A1C','#377EB8','#4DAF4A','#0099B4FF','#925E9FFF')) +
   theme_bw(base_line_size = 0) + 
   guides(fill=FALSE) +
   stat_boxplot(aes(ymin=..lower..,ymax=..upper..),size = 1, width = 0.6) +
@@ -79,9 +102,4 @@ P <- ggplot(data = plot_df,mapping = aes(x=Group,y=Value,fill=Group)) +
 g=""
 ggsave(file=paste0(g,'randomForest_POD.png'),plot = P,device = 'png',width = 9,height = 6)
 ggsave(file=paste0(g,'randomForest_POD.pdf'),plot = P,device = 'pdf',width = 9,height = 6)
-
-
-
-
-
 
