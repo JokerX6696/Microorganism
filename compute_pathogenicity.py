@@ -1,8 +1,8 @@
 
 
 # para
-input = 'D:/desk/XMSH_202309_6215/Abundance.all.xls'
-output = 'D:/desk/XMSH_202309_6215/pathogenicity_index.xls'
+input = 'D:/desk/XMSH_202309_6215/Abundance.filtered.xls'
+output = 'D:/desk/XMSH_202309_6215/pathogenicity_index.txt'
 data_db = 'D:/desk/XMSH_202309_6215/pathogenicity_index.db'
 
 def get_pathogenicity(I,O,db):
