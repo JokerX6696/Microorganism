@@ -6,7 +6,7 @@ library(patchwork)
 ####### para
 group_f <- 'mapping.txt'
 f <- 'KEGG_L3.Kruskal_Wallis.xls'
-list_od <- c('EtOH_1','EtOH_2','EtOH_3','con_4')
+list_od <- c('EtOH_1','EtOH_2','EtOH_3','Con_4')
 ###########  wilcox 函数封装
 wilcox_test_zfx <- function(group1,group2){
   if(identical(group1,group2)){
@@ -32,7 +32,7 @@ names(group) <- c('Sample','Group')
 group$Group <- gsub("-","_",group$Group)
 ########### data df
 data <- read.table(f,sep = '\t',header = TRUE, row.names = 1,quote = "")
-for (Sample in unique(group$Group)) {
+for (Sample in list_od) {
   if (Sample == 'EtOH_4') {
     next
   }else{
@@ -161,7 +161,12 @@ for (Sample in unique(group$Group)) {
     
     p <- p1 + p2 + p3 + plot_layout(widths = c(6,6,2))
     ggsave(filename = paste0(Sample,'_vs_EtOH_4_','stamp.png'),plot = p,device = 'png',width = 12,height = 6)
-    
+    ggsave(filename = paste0(Sample,'_vs_EtOH_4_','stamp.pdf'),plot = p,device = 'pdf',width = 12,height = 6)
+    sel <- group$Sample[group$Group == Sample | group$Group == 'EtOH_4']
+    t_df <- data[rownames(plot_info_df),sel]
+    wt_df <- data.frame(L3=rownames(plot_info_df),t_df,plot_info_df[,1:3])
+    wt_df <- wt_df[,-c(18,19)]
+    write.table(x = wt_df,file = paste0(Sample,'_vs_EtOH_4_','stat.xls'),sep = '\t',row.names = FALSE,quote = F)
   }
 }
 
