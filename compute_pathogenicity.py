@@ -1,9 +1,14 @@
 
-
+import argparse
 # para
-input = 'D:/desk/XMSH_202309_6215/Abundance.filtered.xls'
-output = 'D:/desk/XMSH_202309_6215/pathogenicity_index.txt'
-data_db = 'D:/desk/XMSH_202309_6215/pathogenicity_index.db'
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', help='请输入丰度矩阵  eg: Abundance.filtered.xls', type=str)
+parser.add_argument('-o', help='请输入 output 文件名 默认输出文件为 ./pathogenicity_index.txt', type=str,default='./pathogenicity_index.txt')
+args = parser.parse_args()
+input = args.i
+output = args.o
+data_db = '/data/USER/zhengfuxing/DB/pathogenicity_index.db'
 
 def get_pathogenicity(I,O,db):
     db_set=set()
