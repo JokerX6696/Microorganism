@@ -1,15 +1,25 @@
-
+import re
+import argparse
+import pandas as pd
 
 # para
-input = 'D:/desk/XMSH_202309_6215/Abundance.filtered.xls'
-out_f = 'D:/desk/XMSH_202309_6215/Fungi_Bacteria_ratio.txt'
 
+parser = argparse.ArgumentParser()
+parser.add_argument('-i', help='输入丰度矩阵文件 eg: Abundance.filtered.xls', type=str)
+parser.add_argument('-o', help='输出文件路径,默认输出文件为 ./ratio.txt', type=str,default='./ratio.txt')
+parser.add_argument('-b1', help='比例分子,可以是界门纲目科属种任意一级的的名称,默认是 Fungi(真菌).', type=str,default='Fungi')
+parser.add_argument('-b2', help='比例分子,可以是界门纲目科属种任意一级的的名称,默认是 Bacteria(细菌).', type=str,default='Bacteria')
+args = parser.parse_args()
+
+input = args.i
+out_f = args.o
+bl1 = args.b1
+bl2 = args.b2
 
 
 level_list = ['#Kingdom','Phylum','Class','Order','Family','Genus','Species']
 
-bl1 = 'Fungi'
-bl2 = 'Bacteria'
+
 
 f = open(input, 'r')
 data = f.readlines()
@@ -41,7 +51,7 @@ for line in data:
             compute_dict[sample][bl2] += float(i)
             idx += 1
 
-print(compute_dict)
+#print(compute_dict)
 
 out = open(out_f, 'w')
 print('Sample',bl1,bl2,'%s / %s' %(bl1,bl2),sep='\t',file=out)
