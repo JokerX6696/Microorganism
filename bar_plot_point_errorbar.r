@@ -17,13 +17,27 @@ df_avg$err <- errbar
 
 df_avg$Group <- factor(df_avg$Group,levels = df_avg$Group)
 df$Group <- factor(df$Group,levels = unique(df$Group))
-
-ggplot() + 
-  geom_bar(data = df_avg,mapping = aes(x=Group,y=avg,fill=Group),stat = 'identity') + 
+df_aov <- data.frame(value=df$Shannon,Group <- factor(g))
+names(df_aov) <- c('value','Group')
+ret <- aov(value ~ Group,df_aov)
+ret <- anova(ret)$"Pr(>F)"[1]
+ret <- format(ret, scientific = TRUE)
+ret <- signif(as.numeric(ret), digits = 2)
+pvalue <- paste0('** P = ',ret)
+p <- ggplot() + 
+  geom_bar(data = df_avg,mapping = aes(x=Group,y=avg,fill=Group),stat = 'identity',width = 0.6,alpha = 0.7) + 
   geom_point(data = df,mapping = aes(x=Group,y=Shannon,fill=Group), size = 2,show.legend = F) +
-  theme_bw() + 
+  theme_classic() + 
   geom_errorbar(data = df_avg,aes( ymin=(avg-err),ymax=(avg+err),x=Group),width = 0.2,stat = "identity",position = "identity") + 
-  scale_fill_manual(values = c('#00468BFF','#ED0000FF','#42B540FF','#0099B4FF'))
+  scale_fill_manual(values = c('#00468BFF','#ED0000FF','#42B540FF','#0099B4FF')) + 
+  labs(y='Shannon') + 
+  scale_y_continuous(limits = c(0,4),expand = c(0,0)) + 
+  geom_signif(data=df_avg,
+              aes(xmin='blank', xmax='A5B5', annotations=pvalue, y_position=3.5),
+              textsize = 6, vjust = 0.05, tip_length = c(0.02, 0.02),
+              manual=TRUE) #+
+  #theme(text = element_text(size = 14, face = "bold"))
+  
 
 
 
