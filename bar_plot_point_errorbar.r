@@ -1,6 +1,7 @@
 rm(list=ls())
 setwd('D:/desk/XMSH_202311_7584/2.alpha_beta')
 library('ggplot2')
+library('ggpubr')
 
 alpha_f <- 'Alpha_diversity_Index.xls'
 
@@ -35,10 +36,9 @@ p <- ggplot() +
   geom_signif(data=df_avg,
               aes(xmin='blank', xmax='A5B5', annotations=pvalue, y_position=3.5),
               textsize = 6, vjust = 0.05, tip_length = c(0.02, 0.02),
-              manual=TRUE) #+
-  #theme(text = element_text(size = 14, face = "bold"))
+              manual=TRUE) 
   
-
+ggsave(filename = 'Shannon_bar_plot.pdf',device = 'pdf',width = 9,height = 6,plot = p)
 
 
 
