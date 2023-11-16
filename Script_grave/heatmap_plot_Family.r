@@ -3,21 +3,24 @@ setwd('D:/desk/XMSH_202311_7584/3.TOP30/ANOVA')
 library('ggplot2')
 library('reshape2')
 library('pheatmap')
-ipt <- c('Bifidobacterium','Streptococcus','Lactobacillus_rhamnosus','Lactobacillus_plantarum','Lactobacillus_reuteri','Lactobacillus_paracasei','Streptococcus_mutans','Veillonella','Actinomyces_viscosus','Porphyromonas_gingivalis','Fusobacterium','Helicobacter_pylori','Staphylococcus_aureus','Prevotella','Xanthomonas')
+library('dplyr')
+ipt <- c('Bifidobacteriaceae','Streptococcaceae','Lactobacillaceae','Lactobacillaceae','Lactobacillaceae','Lactobacillaceae','Streptococcaceae','Veillonellaceae','Actinomycetaceae','Porphyromonadaceae','Fusobacteriaceae','Helicobacteraceae','Staphylococcaceae','Bacteroidaceae','Xanthomonadaceae')
 df_abd <- read.table('Abundance_Stat.group.xls',sep='\t',quote = "",comment.char = "",header = TRUE)
-df_abd <- df_abd[,-c(1:6)]
+df_abd <- df_abd[,-c(1:4,6,7)]
 
 
-df <- read.table('genus.ANOVA.Group.add_sum.xls',sep='\t',quote = "",comment.char = "",header = TRUE)
+df <- read.table('family.ANOVA.Group.add_sum.xls',sep='\t',quote = "",comment.char = "",header = TRUE)
 
-sel <- df$species[df$P <= 0.05]
+sel <- df$family[df$P <= 0.05]
 if(length(sel)>30){sel <- sel[1:30]}
 jj <- unique(c(sel,ipt))
-jj <- jj[jj %in% df_abd$Specie]
+jj <- jj[jj %in% df_abd$Family]
 
 
-df_plot <- df_abd[df_abd$Specie %in% jj,]
-rownames(df_plot) <- df_plot$Specie
+df_plot <- df_abd[df_abd$Family %in% jj,]
+df_plot <- as.data.frame(df_plot %>% group_by(Family) %>% summarize(across(.cols = 1:4, .fns = sum)))
+
+rownames(df_plot) <- df_plot$Family
 df_plot <- df_plot[,-1]
 
 annotation_col = data.frame(
@@ -25,7 +28,7 @@ annotation_col = data.frame(
 )
 rownames(annotation_col) = names(df_plot)
 ann_colors = list(Group=c(blank = '#00468BFF',PBS = '#ED0000FF',CHX = '#42B540FF',A5B5 ='#0099B4FF'))
-pdf(file = 'TOP30_special_genus_heatmap.pdf',width = 6,height = 9)
+pdf(file = 'TOP30_special_Family_heatmap.pdf',width = 6,height = 9)
 pheatmap(
   mat = df_plot,
   scale = "row",
