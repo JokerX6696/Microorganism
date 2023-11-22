@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-setwd('D:/desk/debug')
+setwd('D:/desk/github/Microorganism/debug')
 rm(list = ls())
 
 args <- commandArgs(trailingOnly = T)
