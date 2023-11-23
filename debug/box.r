@@ -121,7 +121,9 @@ group_num <- length(levels(data$Group))
 group_nc <- max(nchar(levels(data$Group)))
 
 
-taxon <- as.character(unique(data$id))
+taxon <- as.character(unique(
+       
+))
 
 mycol <- c(
     "#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17",
