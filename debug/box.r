@@ -139,7 +139,7 @@ mycol <- c(
 )
 
 method <- basename(dirname(output))
-
+# taxon 长度影响出图数量
 for (i in 1:length(taxon)) {
     plotdata <- data.frame(
         Group = data[data$id %in% taxon[i], ]$Group,
