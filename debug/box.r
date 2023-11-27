@@ -1,3 +1,9 @@
+# input=/storge1/automation/projects/DNA/dna/2bRAD-M/2023/10/DZOE2023090692-b1/Suppl_5/RefSeq/meta_statistic/ANOVA/species/diff_species_top10_boxplot.txt
+# group=/storge1/automation/projects/DNA/dna/2bRAD-M/2023/10/DZOE2023090692-b1/Suppl_5/RefSeq/meta_statistic/ANOVA/species/species.ANOVA.Group.xls
+
+# #   %s %s/taxon_diff_boxplot.r -i %s/diff_%s_top10_boxplot.txt --output %s -l %s
+
+# /usr/local/envs/qiime2-2020.11/bin/Rscript ./plot_box.r -i $input --output ./ -l species
 suppressPackageStartupMessages(library("optparse"))
 option_list <- list(
     make_option(c("-i", "--infile"),
@@ -121,9 +127,7 @@ group_num <- length(levels(data$Group))
 group_nc <- max(nchar(levels(data$Group)))
 
 
-taxon <- as.character(unique(
-       
-))
+taxon <- as.character(unique(data$id))
 
 mycol <- c(
     "#7FC97F", "#BEAED4", "#FDC086", "#386CB0", "#F0027F", "#BF5B17",
