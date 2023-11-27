@@ -94,8 +94,62 @@ kruskal_plot <- function(){
   }
   
 }
-test_plot <- function(){}
-wilcox_plot <- function(){}
+test_plot <- function(){
+  for(e in lev){
+    abd <- read.table(file = (paste0(lev_dir,'/',e,'.xls')),header = T,row.names = 1)
+    abd <- abd[,temp_df$sample]
+    # 每次循环检验一个物种
+    for (mk in rownames(abd)) {
+      abd_t_test <- as.data.frame(t(abd[mk,]))
+      abd_t_test_group <- c()
+      for (q in rownames(abd_t_test)) {
+        w <- temp_df[temp_df$sample == q,2]
+        abd_t_test_group <- c(abd_t_test_group,w)
+      }
+      abd_t_test$group <- abd_t_test_group
+      biomk <- mk
+      names(abd_t_test)[1] <-  'biomk'
+      vet_1 = abd_t_test[abd_t_test$group == unique(abd_t_test$group)[1],1]
+      vet_2 = abd_t_test[abd_t_test$group == unique(abd_t_test$group)[2],1]
+      t_test_result <- t.test(vet_1,vet_2)
+      pvalue <- t_test_result$p.value
+      if(is.na(pvalue)){next}
+      if(pvalue < 0.05){
+        plot_zdy(data = abd_t_test,methods='T-test',biomk=biomk,lev=e,pvalue=pvalue,col=col)
+      }
+      
+    }
+  }
+  
+}
+wilcox_plot <- function(){
+  for(e in lev){
+    abd <- read.table(file = (paste0(lev_dir,'/',e,'.xls')),header = T,row.names = 1)
+    abd <- abd[,temp_df$sample]
+    # 每次循环检验一个物种
+    for (mk in rownames(abd)) {
+      abd_t_test <- as.data.frame(t(abd[mk,]))
+      abd_t_test_group <- c()
+      for (q in rownames(abd_t_test)) {
+        w <- temp_df[temp_df$sample == q,2]
+        abd_t_test_group <- c(abd_t_test_group,w)
+      }
+      abd_t_test$group <- abd_t_test_group
+      biomk <- mk
+      names(abd_t_test)[1] <-  'biomk'
+      vet_1 = abd_t_test[abd_t_test$group == unique(abd_t_test$group)[1],1]
+      vet_2 = abd_t_test[abd_t_test$group == unique(abd_t_test$group)[2],1]
+      wilcox_test_result <- wilcox.test(vet_1,vet_2)
+      pvalue <- wilcox_test_result$p.value
+      if(is.na(pvalue)){next}
+      if(pvalue < 0.05){
+        plot_zdy(data = abd_t_test,methods='wilcox-test',biomk=biomk,lev=e,pvalue=pvalue,col=col)
+      }
+      
+    }
+  }
+  
+}
 #################
 # 最外层为每一种方式循环一次
 group <- read.table(g,header = T,sep = '\t',comment.char = "",row.names = 1)
@@ -103,7 +157,7 @@ for (col in names(group)) {
   temp_df <- data.frame(
     sample=rownames(group)[group[,col] != ""],
     group=group[group[,col] != "",col]
-  )
+    )
   group_num = length(unique(temp_df$group))
   if(group_num > 2){
     anova_plot()
@@ -113,6 +167,10 @@ for (col in names(group)) {
     wilcox_plot()
   }
 }
+
+
+
+
 
 
 
