@@ -2,7 +2,7 @@
 import pandas as pd
 wkdir = 'D:/desk/asd/'
 f1 = wkdir + 'sp2spe.txt'
-#  cog0000 -> sp -> mic_name
+#  ko -> sp -> mic_name
 sp2species = {}
 with open(f1,'r') as f:   # 得到sp 与 物种对应关系
     for line in f:
