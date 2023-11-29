@@ -47,6 +47,7 @@ with open(final_file,'r') as f:
         cog_id = info[0]
 
         if cog_id not in KO_ko:
+            print('',file=fo)
             continue
         sp_id_list_pre=KO_ko[cog_id]
         all = []
