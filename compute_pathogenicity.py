@@ -8,7 +8,7 @@ parser.add_argument('-o', help='请输入 output 文件名 默认输出文件为
 args = parser.parse_args()
 input = args.i
 output = args.o
-data_db = '/data/USER/zhengfuxing/DB/pathogenicity_index.db'
+data_db = '/home/zhengfuxing/data/2bM/pathogenicity_index.db'
 
 def get_pathogenicity(I,O,db):
     db_set=set()
